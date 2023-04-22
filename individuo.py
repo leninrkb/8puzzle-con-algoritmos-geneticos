@@ -7,6 +7,7 @@ class Individuo:
             [0, 4, 8],
             [1, 7, 5]
         ])
+        self.probabilidad_reproduccion = 0
 
     def poscicion_cero(self):
         x, y = self.genes.shape
