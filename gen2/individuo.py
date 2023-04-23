@@ -1,6 +1,6 @@
 import numpy as np
 class Individuo:
-    def __init__(self, genes:list, binario:list):
+    def __init__(self, genes, binario=None):
         self.genes = genes
         self.binario = binario
         self.puntuacion = None
@@ -15,7 +15,10 @@ class Individuo:
         listamodelo = np.array(modelo).flatten().tolist()
         for i in range(len(listamodelo)):
             if self.binario[i] == 1:
+                indice = self.genes.index(listamodelo[i])
+                aux = self.genes[i]
                 self.genes[i] = listamodelo[i]
+                self.genes[indice] = aux
 
     def ver_genes(self):
-        print(f'*** genes:\n{self.genes}\nbinario:\n{self.binario}\n')
+        print(f'*** genes:\n{np.array(self.genes).reshape(3,3)}\nbinario:\n{self.binario}\n')

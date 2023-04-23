@@ -8,26 +8,12 @@ MODELO = [
     [7,8,0],
 ]
 
-def calcular_binario(genes:list):
-    lista_modelo = np.array(MODELO).flatten().tolist()
-    binario = []
-    for i in range(len(genes)):
-        if genes[i] == lista_modelo[i]:
-            binario.append(1)
-        else:
-            binario.append(0)
-    return binario
-
-
 def generar_poblacion(semilla:Individuo, densidad:int):
     poblacion = []
     for i in range(densidad):
         nuevos_genes = semilla.genes[:]
         rn.shuffle(nuevos_genes)
-        binario = calcular_binario(nuevos_genes)
-        nuevo_individuo = Individuo(genes=nuevos_genes, binario=binario)
-        nuevo_individuo.puntuar()
-        # print(nuevo_individuo.ver_genes())
+        nuevo_individuo = Individuo(genes=nuevos_genes)
         poblacion.append(nuevo_individuo)
     return poblacion
 
@@ -102,10 +88,20 @@ def eliminar_masculino(poblacion, masculino):
             del poblacion[index]
             return poblacion
 
+def calcular_binario(genes:list):
+    lista_modelo = np.array(MODELO).flatten().tolist()
+    binario = []
+    for i in range(len(genes)):
+        if genes[i] == lista_modelo[i]:
+            binario.append(1)
+        else:
+            binario.append(0)
+    return binario
+
 def puntuar_individuos(poblacion):
     puntuados= []
     for ind in poblacion:
-        ind.ajusar_con_bin(MODELO)
+        ind.binario = calcular_binario(ind.genes)
         ind.puntuar()
         puntuados.append(ind)
     return puntuados
@@ -140,9 +136,14 @@ def reproducir(padres:list):
     nuevobin2 = binario1_p2 + binario2_p1
 
     hijo1 = Individuo(padres[0].genes, nuevobin1)
+    # hijo1.ajusar_con_bin(MODELO)
+    hijo1.binario = calcular_binario(hijo1.genes)
+
     hijo2 = Individuo(padres[0].genes, nuevobin2)
-    
-    return puntuar_individuos([hijo1, hijo2])
+    # hijo2.ajusar_con_bin(MODELO)
+    hijo2.binario = calcular_binario(hijo2.genes)
+
+    return [hijo1, hijo2]
 
 def mutar(hijos):
     # selecciono uno de los dos hijos random
@@ -151,11 +152,21 @@ def mutar(hijos):
     del hijos[numrandom]
     numrandom = rn.randint(0,len(hijo.binario)-1)
     hijo.binario[numrandom] = rn.randint(0,1)
-    numrandom = rn.randint(0,len(hijo.binario)-1)
-    hijo.binario[numrandom] = rn.randint(0,1)
+    # numrandom = rn.randint(0,len(hijo.binario)-1)
+    # hijo.binario[numrandom] = rn.randint(0,1)
+    hijo.ajusar_con_bin(MODELO)
     hijos.append(hijo)
     return hijos
 
+
+def revisar_mejores_genes(poblacion):
+    listamodelo = np.array(MODELO).flatten().tolist()
+    poblacion = puntuar_individuos(poblacion)
+    for ind in poblacion:
+        if ind.genes == listamodelo:
+            print(f'solucion encontrada:\n {ind.ver_genes()}')
+            return False
+    return True
 
 def ver_lista(lista):
     for i in lista:

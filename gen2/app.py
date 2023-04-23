@@ -9,8 +9,8 @@ gen_semilla = [
 ]
 gen_semilla = np.array(gen_semilla).flatten().tolist()
 binario = al.calcular_binario(gen_semilla)
-poblacion = al.generar_poblacion(semilla=Individuo(gen_semilla, binario), densidad=20)
-poblacion = al.seleccionar_poblacion_inicial(poblacion, (4,6))
+poblacion = al.generar_poblacion(semilla=Individuo(gen_semilla, binario), densidad=200)
+poblacion = al.seleccionar_poblacion_inicial(poblacion, (20,50))
 
 contador = 0
 seguir = True
@@ -21,10 +21,6 @@ while seguir:
     contador+=1
     poblacion = poblacion + hijos
     print(contador)
-    print(f'** bin: {hijos[0].binario}')
-    for h in hijos:
-        h.puntuar()
-        if h.puntuacion >= 8:
-            print(f'solucion encontrada:\n {h.ver_genes()}')
-            seguir = False
-            break
+    print(f'** bin\n{hijos[0].binario}\n{hijos[1].binario}\n')
+    seguir = al.revisar_mejores_genes(poblacion)
+    
