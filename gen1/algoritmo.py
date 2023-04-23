@@ -1,7 +1,7 @@
 from random import shuffle
 import random
 import numpy  as np
-from gen1.individuo import Individuo
+from individuo import Individuo
 import copy
 
 global PRETENDIENTE_MODELO
@@ -65,8 +65,10 @@ def puntuar_pretendientes(femenino, pretendientes):
     for pretendiente in pretendientes:
         heuristica = calcular_heuristica(femenino, pretendiente)
         puntuacion =  9 - heuristica
-        if puntuacion >= 5:
-            print(f'buena puntuacion:{puntuacion}')
+        # if puntuacion >= 5:
+        #     print(f'buena puntuacion:{puntuacion}, \n{pretendiente.genes}')
+        #     input('continuar: ')
+
             # input('continuar: ')
         if puntuacion >= 6:
             print(f'solucion encontrada!!!!! \n{pretendiente.genes}')
@@ -218,4 +220,5 @@ def es_solucion(individuos):
     for ind in individuos:
         if np.array_equal(ind.genes, PRETENDIENTE_MODELO):
             print(ind.imprimir_individuo())
+            input('continuar')
             return True

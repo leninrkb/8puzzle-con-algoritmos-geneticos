@@ -1,4 +1,4 @@
-import gen1.algoritmo as al
+import algoritmo as al
 import numpy as np
 import time
 
