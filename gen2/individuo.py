@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 class Individuo:
     def __init__(self, genes, binario=None):
         self.genes = genes
@@ -12,13 +13,17 @@ class Individuo:
             self.puntuacion = 1
 
     def ajusar_con_bin(self, modelo):
-        listamodelo = np.array(modelo).flatten().tolist()
-        for i in range(len(listamodelo)):
-            if self.binario[i] == 1:
-                indice = self.genes.index(listamodelo[i])
-                aux = self.genes[i]
-                self.genes[i] = listamodelo[i]
-                self.genes[indice] = aux
+        try:
+            listamodelo = np.array(modelo).flatten().tolist()
+            for i in range(len(listamodelo)):
+                if self.binario[i] == 1:
+                    indice = self.genes.index(listamodelo[i])
+                    aux = self.genes[i]
+                    self.genes[i] = listamodelo[i]
+                    self.genes[indice] = aux
+        except:
+            print("Error: imposible llegar al objetivo")
+            sys.exit()
 
     def ver_genes(self):
         print(f'*** genes:\n{np.array(self.genes).reshape(3,3)}\nbinario:\n{self.binario}\n')
